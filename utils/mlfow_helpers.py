@@ -83,3 +83,11 @@ def get_multiple_versions_context(client: mlflow.tracking.client.MlflowClient,
             "subsample": ctx["params"].get("subsample"),
         })
     return pd.DataFrame(data)
+
+
+def load_model(mlflow_uri: str, registered_model_name: str, version: int):
+    mlflow.set_tracking_uri(mlflow_uri)
+
+    model_uri = f"models:/{registered_model_name}/{version}"
+    model = mlflow.pyfunc.load_model(model_uri=model_uri)
+    return model
