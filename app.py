@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.mlfow_helpers import initiate_client, get_all_models, get_model_versions, get_multiple_versions_context
+from utils.mlfow_helpers import initiate_client, load_model, get_all_models, get_model_versions, get_multiple_versions_context
 from utils.graphs import rmse_comparison_between_model_version,  plot_rmse_vs_column, overfit_gap_bar_chart, cv_vs_test_scatter, parallel_cordinates, precision_recall_comparison, precision_recall_scatter, plot_precision_recall_vs_column
 from config import MLFLOW_URI, FEATURES_DATA_COLS, ML_PARAMS_COLS
 
@@ -126,3 +126,11 @@ st.download_button(
     df.to_csv(index=False),
     f"{selected_model}_data.csv"
 )
+
+selected_version = st.selectbox("Select Version", versions)
+
+model = load_model(mlflow_uri=MLFLOW_URI, registered_model_name=selected_model, 
+                   version=selected_version)
+st.write(type(model))
+st.write(model)
+st.success("Model loaded successfully")
